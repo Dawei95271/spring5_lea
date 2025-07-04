@@ -3,21 +3,39 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/aop
-       https://www.springframework.org/schema/aop/spring-aop.xsd">
+       https://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--被代理类和通知类都交给IoC管理-->
-    <bean class="com.spring.aop.FirstAopTarget" name="firstAopTarget"/>
-    <bean class="com.spring.aop.FirstAopAspect" name="firstAopAspect"/>
+    <bean class="com.spring.aop.test0.FirstAopTarget" name="firstAopTarget"/>
+    <bean class="com.spring.aop.test0.FirstAopAspect" name="firstAopAspect"/>
     <!--aop的相关配置都写到aop:config标签中-->
     <aop:config>
         <!--配置 aspect 切面-->
         <aop:aspect id="myAspect" ref="firstAopAspect">
             <!--配置 advice 通知 以及应用的切入点(表达式)-->
-            <aop:before method="helloAop" pointcut="execution(public void com.spring.aop.FirstAopTarget.target())"/>
-            <aop:after method="helloAop" pointcut="execution(public void com.spring.aop.FirstAopTarget.target())"/>
+            <aop:before method="helloAop" pointcut="execution(public void com.spring.aop.test0.FirstAopTarget.target())"/>
+            <aop:after method="helloAop" pointcut="execution(public void com.spring.aop.test0.FirstAopTarget.target())"/>
         </aop:aspect>
+
     </aop:config>
+
+
+
+<!--    开启组件扫描需要加上@component   不开启，则需要手动配置<bean>组件-->
+    <!-- 启用AspectJ自动代理 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+<!--     开启组件扫描 -->
+    <context:component-scan base-package="com.spring.aop"/>
+
+<!--    &lt;!&ndash; 定义切面Bean &ndash;&gt;-->
+<!--    <bean id="loggingAspect" class="com.spring.aop.LoggingAspect"/>-->
+
+<!--    &lt;!&ndash; 其他业务Bean &ndash;&gt;-->
+<!--    <bean id="userService" class="com.spring.aop.test1.UserServiceImpl"/>-->
 </beans>
